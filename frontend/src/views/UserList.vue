@@ -2,6 +2,9 @@
   <div class="page-container">
     <page-header title="用户管理" description="管理系统中的所有用户账户">
       <template #extra>
+        <el-button type="success" icon="el-icon-plus" @click="handleAddUser">
+          添加用户
+        </el-button>
         <el-button type="primary" icon="el-icon-refresh" @click="handleRefresh">
           刷新
         </el-button>
@@ -204,6 +207,15 @@
             <el-button
               type="text"
               size="small"
+              style="color: #e6a23c;"
+              @click="handleResetPassword(scope.row)"
+            >
+              重置密码
+            </el-button>
+            
+            <el-button
+              type="text"
+              size="small"
               style="color: #f56c6c;"
               @click="handleDeleteUser(scope.row)"
             >
@@ -239,6 +251,19 @@
       :user="selectedUser"
       @success="handleRefresh"
     />
+    
+    <!-- 添加用户对话框 -->
+    <add-user-dialog
+      :visible.sync="addUserVisible"
+      @success="handleRefresh"
+    />
+    
+    <!-- 重置密码对话框 -->
+    <reset-password-dialog
+      :visible.sync="resetPasswordVisible"
+      :user="selectedUser"
+      @success="handleRefresh"
+    />
   </div>
 </template>
 
@@ -247,6 +272,8 @@ import { mapGetters } from 'vuex'
 import PageHeader from '@/components/common/PageHeader'
 import UserDetailDialog from './components/UserDetailDialog'
 import UserRoleDialog from './components/UserRoleDialog'
+import AddUserDialog from './components/AddUserDialog'
+import ResetPasswordDialog from './components/ResetPasswordDialog'
 import { getRoleList } from '@/api/role'
 
 export default {
@@ -254,7 +281,9 @@ export default {
   components: {
     PageHeader,
     UserDetailDialog,
-    UserRoleDialog
+    UserRoleDialog,
+    AddUserDialog,
+    ResetPasswordDialog
   },
   data() {
     return {
@@ -267,6 +296,8 @@ export default {
       selectedUser: null,
       userDetailVisible: false,
       userRoleVisible: false,
+      addUserVisible: false,
+      resetPasswordVisible: false,
       roleList: [],
       statistics: {
         totalUsers: 0,
@@ -462,9 +493,18 @@ export default {
       }
     },
     
+    handleAddUser() {
+      this.addUserVisible = true
+    },
+    
     handleManageRoles(user) {
       this.selectedUser = user
       this.userRoleVisible = true
+    },
+    
+    handleResetPassword(user) {
+      this.selectedUser = user
+      this.resetPasswordVisible = true
     },
     
     async handleDeleteUser(user) {

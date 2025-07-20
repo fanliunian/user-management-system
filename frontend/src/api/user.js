@@ -12,6 +12,17 @@ export function getUserList(params) {
 }
 
 /**
+ * 创建新用户
+ */
+export function createUser(data) {
+  return request({
+    url: '/users',
+    method: 'post',
+    data
+  })
+}
+
+/**
  * 根据ID获取用户详情
  */
 export function getUserById(id) {
@@ -27,6 +38,17 @@ export function getUserById(id) {
 export function updateUserStatus(id, data) {
   return request({
     url: `/users/${id}/status`,
+    method: 'put',
+    data
+  })
+}
+
+/**
+ * 重置用户密码
+ */
+export function resetUserPassword(id, data) {
+  return request({
+    url: `/users/${id}/reset-password`,
     method: 'put',
     data
   })

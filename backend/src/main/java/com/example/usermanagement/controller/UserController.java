@@ -89,6 +89,23 @@ public class UserController {
                 .body(ApiResponse.error(e.getMessage()));
         }
     }
+    
+    /**
+     * 创建新用户（管理员功能）
+     */
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(
+            @Valid @RequestBody CreateUserRequest request,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            UserResponse userResponse = userService.createUser(request, userPrincipal.getId());
+            return ResponseEntity.ok(ApiResponse.success("用户创建成功", userResponse));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(ApiResponse.error(e.getMessage()));
+        }
+    }
 
     /**
      * 获取用户详情（管理员功能）
@@ -124,6 +141,30 @@ public class UserController {
             userService.updateUserStatus(id, status, userPrincipal.getId());
             String message = status == 1 ? "用户已启用" : "用户已禁用";
             return ResponseEntity.ok(ApiResponse.success(message));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 重置用户密码（管理员功能）
+     */
+    @PutMapping("/{id}/reset-password")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<String>> resetUserPassword(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> request,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            String password = request.get("password");
+            if (password == null || password.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(ApiResponse.error("密码不能为空"));
+            }
+
+            userService.resetUserPassword(id, password, userPrincipal.getId());
+            return ResponseEntity.ok(ApiResponse.success("密码重置成功"));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                 .body(ApiResponse.error(e.getMessage()));

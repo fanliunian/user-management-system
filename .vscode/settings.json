@@ -2,6 +2,7 @@
     "kiroAgent.trustedCommands": [
         "npm *",
         "mvn *",
-        "dir -Force -Hidden"
+        "dir -Force -Hidden",
+        "git *"
     ]
 }

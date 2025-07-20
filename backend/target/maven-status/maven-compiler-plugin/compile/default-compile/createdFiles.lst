@@ -25,6 +25,7 @@ com\example\usermanagement\service\RoleService.class
 com\example\usermanagement\service\UserService.class
 com\example\usermanagement\mapper\UserMapper.class
 com\example\usermanagement\UserManagementApplication.class
+com\example\usermanagement\dto\CreateUserRequest.class
 com\example\usermanagement\controller\RoleController.class
 com\example\usermanagement\dto\ChangePasswordRequest.class
 com\example\usermanagement\controller\AuthController.class

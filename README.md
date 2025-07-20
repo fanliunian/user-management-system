@@ -35,6 +35,8 @@
 - ✅ 用户列表管理（分页、搜索、筛选）
 - ✅ 用户状态管理（启用/禁用）
 - ✅ 批量操作支持
+- ✅ 管理员添加用户
+- ✅ 管理员重置用户密码
 
 ### 角色权限
 - ✅ 角色管理（CRUD操作）
@@ -156,8 +158,10 @@ npm run serve
 | 方法 | 路径 | 描述 | 权限 |
 |------|------|------|------|
 | GET | /api/users | 获取用户列表 | ADMIN |
+| POST | /api/users | 创建新用户 | ADMIN |
 | GET | /api/users/{id} | 获取用户详情 | ADMIN |
 | PUT | /api/users/{id}/status | 更新用户状态 | ADMIN |
+| PUT | /api/users/{id}/reset-password | 重置用户密码 | ADMIN |
 | DELETE | /api/users/{id} | 删除用户 | ADMIN |
 | GET | /api/users/profile | 获取个人信息 | 认证用户 |
 | PUT | /api/users/profile | 更新个人信息 | 认证用户 |
@@ -257,6 +261,12 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 - 发送邮件至：[your-email@example.com]
 
 ## 更新日志
+
+### v1.1.1 (2024-07-20)
+- ✅ 添加管理员创建用户功能
+- ✅ 添加管理员重置用户密码功能
+- ✅ 优化用户管理界面
+- ✅ 修复PostgreSQL数据库兼容性问题
 
 ### v1.0.0 (2024-01-20)
 - ✅ 完成用户管理基础功能

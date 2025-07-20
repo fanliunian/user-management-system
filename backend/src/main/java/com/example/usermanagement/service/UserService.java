@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.usermanagement.dto.*;
 import com.example.usermanagement.entity.User;
+import com.example.usermanagement.entity.UserRole;
 import com.example.usermanagement.exception.BusinessException;
 import com.example.usermanagement.mapper.UserMapper;
 import com.example.usermanagement.mapper.UserRoleMapper;
@@ -241,5 +242,67 @@ public class UserService {
         } else {
             return userMapper.countByEmail(email) == 0;
         }
+    }
+    
+    /**
+     * 创建新用户（管理员功能）
+     */
+    @Transactional
+    public UserResponse createUser(CreateUserRequest request, Long creatorId) {
+        // 检查用户名是否已存在
+        if (userMapper.countByUsername(request.getUsername()) > 0) {
+            throw new BusinessException("USERNAME_EXISTS", "用户名已存在");
+        }
+
+        // 检查邮箱是否已被注册
+        if (userMapper.countByEmail(request.getEmail()) > 0) {
+            throw new BusinessException("EMAIL_EXISTS", "邮箱已被注册");
+        }
+
+        // 创建新用户
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setStatus(request.getStatus());
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        // 保存用户
+        userMapper.insert(user);
+
+        // 分配角色
+        for (Long roleId : request.getRoles()) {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(user.getId());
+            userRole.setRoleId(roleId);
+            userRole.setCreatedAt(LocalDateTime.now());
+            userRoleMapper.insert(userRole);
+        }
+
+        // 获取完整用户信息（包含角色）
+        User savedUser = userMapper.findByIdWithRoles(user.getId());
+        
+        return UserResponse.from(savedUser);
+    }
+    
+    /**
+     * 重置用户密码（管理员功能）
+     */
+    @Transactional
+    public void resetUserPassword(Long userId, String newPassword, Long adminId) {
+        // 检查是否尝试重置自己的密码（应该使用修改密码功能）
+        if (userId.equals(adminId)) {
+            throw new BusinessException("INVALID_OPERATION", "请使用修改密码功能修改自己的密码");
+        }
+
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("USER_NOT_FOUND", "用户不存在");
+        }
+
+        // 更新密码
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        userMapper.updatePassword(userId, encodedNewPassword, LocalDateTime.now());
     }
 }
