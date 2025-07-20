@@ -1,0 +1,7 @@
+{
+    "kiroAgent.trustedCommands": [
+        "npm *",
+        "mvn *",
+        "dir -Force -Hidden"
+    ]
+}

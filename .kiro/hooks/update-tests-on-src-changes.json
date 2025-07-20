@@ -1,0 +1,19 @@
+{
+  "name": "Update Test Cases on Source Changes",
+  "description": "When files in src directories are created or modified, update corresponding test files if necessary",
+  "trigger": {
+    "type": "fileChange",
+    "patterns": [
+      "**/src/**/*"
+    ],
+    "events": ["create", "modify"]
+  },
+  "action": {
+    "type": "agent",
+    "prompt": "A file in the src directory has been changed: {{filePath}}. Please analyze if this change requires updating any test cases. If so, create or update the appropriate test files to ensure the functionality is properly tested. Consider:\n\n1. What functionality was added or modified\n2. What test scenarios should be covered\n3. Whether existing tests need to be updated\n4. If new test files need to be created\n\nPlease update the test files accordingly.",
+    "context": {
+      "includeChangedFile": true,
+      "includeRelatedFiles": true
+    }
+  }
+}

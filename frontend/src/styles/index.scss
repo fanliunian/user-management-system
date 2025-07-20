@@ -1,0 +1,111 @@
+@import './variables.scss';
+
+// 全局样式重置
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 清除浮动
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+// 文本省略
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行文本省略
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+// 居中布局
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// 页面容器
+.page-container {
+  padding: $padding-large;
+  background-color: $bg-color;
+  min-height: calc(100vh - #{$header-height});
+}
+
+.content-container {
+  background-color: $white-color;
+  border-radius: $border-radius-base;
+  box-shadow: $box-shadow-base;
+  padding: $padding-large;
+}
+
+// 表单样式
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: $padding-large;
+  background-color: $white-color;
+  border-radius: $border-radius-base;
+  box-shadow: $box-shadow-base;
+}
+
+// 按钮组
+.button-group {
+  margin-top: $padding-base;
+  text-align: center;
+  
+  .el-button + .el-button {
+    margin-left: $padding-small;
+  }
+}
+
+// 状态标签
+.status-tag {
+  &.enabled {
+    color: $success-color;
+  }
+  
+  &.disabled {
+    color: $danger-color;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .page-container {
+    padding: $padding-base;
+  }
+  
+  .content-container {
+    padding: $padding-base;
+  }
+  
+  .form-container {
+    padding: $padding-base;
+    margin: 0 $padding-small;
+  }
+}

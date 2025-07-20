@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Source Test Updater",
+  "description": "Monitors src directories for file changes and prompts to update corresponding test cases when necessary",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "backend/src/**/*",
+      "frontend/src/**/*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A file in the src directory has been created or modified. Please analyze the changes and determine if any test cases need to be updated or created. If so, please update the relevant test files to ensure proper test coverage for the modified functionality."
+  }
+}
