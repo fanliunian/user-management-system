@@ -79,4 +79,13 @@ public class ApiResponse<T> {
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
     }
+    
+    // 为了兼容测试用例，添加getError和setError方法
+    public String getError() {
+        return errorCode;
+    }
+
+    public void setError(String error) {
+        this.errorCode = error;
+    }
 }

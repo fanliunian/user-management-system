@@ -25,12 +25,24 @@ public class JwtTokenProvider {
 
     @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
+    
+    private SecretKey signingKey;
+    
+    /**
+     * 初始化签名密钥
+     */
+    public void init() {
+        this.signingKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
 
     /**
      * 获取签名密钥
      */
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        if (signingKey == null) {
+            signingKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        }
+        return signingKey;
     }
 
     /**
@@ -126,5 +138,28 @@ public class JwtTokenProvider {
         } catch (JwtException e) {
             return true;
         }
+    }
+    
+    /**
+     * 获取令牌的过期日期
+     */
+    public Date getExpirationDateFromToken(String token) {
+        try {
+            Claims claims = getAllClaimsFromToken(token);
+            return claims.getExpiration();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    /**
+     * 获取令牌中的所有声明
+     */
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

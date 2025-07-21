@@ -1,8 +1,3 @@
 {
-    "kiroAgent.trustedCommands": [
-        "npm *",
-        "mvn *",
-        "dir -Force -Hidden",
-        "git *"
-    ]
+    "java.debug.settings.onBuildFailureProceed": true
 }
