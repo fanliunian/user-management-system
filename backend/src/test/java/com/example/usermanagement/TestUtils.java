@@ -76,8 +76,20 @@ public class TestUtils {
      * 打印测试分隔线
      */
     public static void printSeparator(String testName) {
-        System.out.println("=".repeat(50));
+        String separator = repeatString("=", 50);
+        System.out.println(separator);
         System.out.println("测试: " + testName);
-        System.out.println("=".repeat(50));
+        System.out.println(separator);
+    }
+
+    /**
+     * 重复字符串（Java 8兼容）
+     */
+    private static String repeatString(String str, int count) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            sb.append(str);
+        }
+        return sb.toString();
     }
 }
